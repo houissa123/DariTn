@@ -18,6 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import tn.dari.spring.service.UserDetailServiceImpl;
 import tn.dari.spring.service.UserService;
 
+
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -46,6 +48,8 @@ public class SecSecuityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
+
+
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -55,35 +59,40 @@ public class SecSecuityConfig extends WebSecurityConfigurerAdapter {
 
 	}
 
-//		@Override
-//		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//			
-//			
-//			auth.inMemoryAuthentication().withUser("USER")
-//					.password(passwordEncoder().encode("PASSWORD")).roles("CUSTOMER").and().withUser("admin")
-//					.password(passwordEncoder().encode("admin")).roles("USER", "ADMIN");
-//		}
+
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		// /userInfo page requires login as ROLE_USER or ROLE_ADMIN.
-		// If no login, it will redirect to /login page.
+		
 		http.authorizeRequests().antMatchers("/Customer").access("hasAnyRole('Customer', 'Admin')");
-		// only for Admin;
+		
 		http.authorizeRequests().antMatchers("/admin").access("hasRole('Admin')");
 
 		http.authorizeRequests()
 //			.antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/anonymous*").anonymous().antMatchers("/login*").permitAll()
 //				.antMatchers(HttpMethod.DELETE, "/remove-user/{user-id}").permitAll()
 //				.antMatchers(HttpMethod.PUT, "/modify-user").permitAll().antMatchers(HttpMethod.POST, "/add-user")
-//				.permitAll().antMatchers(HttpMethod.GET, "/retrieve-all-users").permitAll()
+				
 ////				.antMatchers(HttpMethod.GET, "/retrieve-all-users/{user-id}").permitAll()
 //				.antMatchers(HttpMethod.GET, "/retrieveUserByLogin/{login}").permitAll()
 //				.antMatchers(HttpMethod.GET, "/retrieveUserByEmail/{email}").permitAll()
-				.antMatchers(HttpMethod.POST, "/add-user").permitAll().antMatchers(HttpMethod.POST, "/authenticate")
-				.permitAll().antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/anonymous*").anonymous()
-				.antMatchers("/login*").permitAll() // obligatoire
+	//	.antMatchers(HttpMethod.GET, "/retrieve-all-users").permitAll()
+		.antMatchers(HttpMethod.GET, "/adses").permitAll()
+		.antMatchers(HttpMethod.GET, "/getAllAds").permitAll()
+
+		.antMatchers(HttpMethod.GET, "/getAdsById/{id}").permitAll()
+		.antMatchers(HttpMethod.POST, "/photos/{id}").permitAll()
+		.antMatchers(HttpMethod.POST, "/postAds").permitAll()
+		.antMatchers(HttpMethod.PUT, "/putAds/{id}").permitAll()
+		.antMatchers(HttpMethod.PUT, "/putAds").permitAll()
+
+		.antMatchers(HttpMethod.DELETE, "/deleteAds/{id}").permitAll()
+		
+
+		//.antMatchers(HttpMethod.POST, "/add-user").permitAll().antMatchers(HttpMethod.POST, "/authenticate")
+		//		.permitAll().antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/anonymous*").anonymous()
+			//	.antMatchers("/login*").permitAll() // obligatoire
 													// pour
 													// affichage
 													// page
